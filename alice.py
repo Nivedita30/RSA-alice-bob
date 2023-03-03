@@ -3,9 +3,10 @@ from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
 from Crypto.Signature import pkcs1_15
 from Crypto.Hash import SHA256
+import pickle
 
 # Connect to Bob's socket
-server_address = ('localhost', 8000)
+server_address = ('localhost', 9090)
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect(server_address)
 
@@ -44,10 +45,11 @@ signature = pkcs1_15.new(RSA.import_key(alice_private_key)).sign(message_hash)
 print("signature=" + str(signature))
 
 # Send the ciphertext and signature to Bob
-client_socket.send(ciphertext)
-client_socket.send(signature)
+data = pickle.dumps((ciphertext, signature, alice_public_key))
+client_socket.sendall(data)
+# client_socket.send(b"signature")
 #Alice sends her public key to Bob
-client_socket.send(alice_public_key)
+# client_socket.send(alice_public_key)
 
 # Wait for a response from Bob
 response = client_socket.recv(1024)

@@ -1,3 +1,4 @@
+import pickle
 import socket
 from Crypto.PublicKey import RSA
 from Crypto.Cipher import PKCS1_OAEP
@@ -15,7 +16,7 @@ def generate_keys(size):
 bob_key, bob_private_key, bob_public_key = generate_keys(1024)
 
 # Bind the socket to a specific IP address and port number
-server_address = ('localhost', 8000)
+server_address = ('localhost', 9090)
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind(server_address)
 
@@ -34,9 +35,13 @@ while True:
     client_socket.send(bob_public_key)
 
     # After the exchange of public keys between Alice & Bob, Bob receives ciphertext and signature from the client (Alice)
-    ciphertext = client_socket.recv(1024)
-    signature = client_socket.recv(1024)
-    alice_public_key=client_socket.recv(1024)
+    # Receive and unpack message and signature
+    packet = client_socket.recv(4096)
+    ciphertext, signature, alice_public_key = pickle.loads(packet)
+    # ciphertext = client_socket.recv(1024)
+    print(f"cipher received:{ciphertext}")
+    # signature = client_socket.recv(1024)
+    # alice_public_key=client_socket.recv(1024)
 
     # Bob verifies the signature using Alice's public key
     message_hash = SHA256.new(ciphertext)
