@@ -31,13 +31,16 @@ while True:
     
     print('Connection from', client_address)
 
-    #Once connection is established, bob sends his public key to Alice
+    #Once connection is establised, bob receives Alice's public key
+    alice_public_key=client_socket.recv(1024)
+    
+    #Then, bob sends his public key to Alice
     client_socket.send(bob_public_key)
 
     # After the exchange of public keys between Alice & Bob, Bob receives ciphertext and signature from the client (Alice)
     # Receive and unpack message and signature
-    packet = client_socket.recv(4096)
-    ciphertext, signature, alice_public_key = pickle.loads(packet)
+    packet = client_socket.recv(2048)
+    ciphertext, signature = pickle.loads(packet)
     # ciphertext = client_socket.recv(1024)
     print(f"cipher received:{ciphertext}")
     # signature = client_socket.recv(1024)
@@ -61,3 +64,4 @@ while True:
 
     # Close the connection
     client_socket.close()
+    
