@@ -30,20 +30,21 @@ bob_public_key=client_socket.recv(1024)
 #After the exchange of public keys between Alice & Bob, Alice creates a cipher object using Bob's public key
 cipher = PKCS1_OAEP.new(RSA.import_key(bob_public_key))
 
+#Alice open the top secret document on her end and prints the plain text message
 with open('top_secret.txt', 'r') as f:
     message = f.read()
 print("message=" + message)
 
-# Alice encrypts a message to Bob using Bob's public key
+# Alice encrypts the plain text message to Bob using Bob's public key
 ciphertext = cipher.encrypt(message = message.encode())
 print("ciphertext=" + str(ciphertext))
 
-# Alice signs the encrypted message using her private key
+# Alice signs the encrypted message by hashing the file contents using her private key
 message_hash = SHA256.new(ciphertext)
 signature = pkcs1_15.new(RSA.import_key(alice_private_key)).sign(message_hash)
 print("signature=" + str(signature))
 
-# Send the ciphertext and signature to Bob
+# Alice sends the ciphertext and signature to Bob
 data = pickle.dumps((ciphertext, signature))
 client_socket.sendall(data)
 
