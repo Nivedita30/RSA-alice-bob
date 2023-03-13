@@ -41,10 +41,6 @@ while True:
     # Receive and unpack message and signature
     packet = client_socket.recv(2048)
     ciphertext, signature = pickle.loads(packet)
-    # ciphertext = client_socket.recv(1024)
-    print(f"cipher received:{ciphertext}")
-    # signature = client_socket.recv(1024)
-    # alice_public_key=client_socket.recv(1024)
 
     # Bob verifies the signature using Alice's public key
     message_hash = SHA256.new(ciphertext)
@@ -58,6 +54,10 @@ while True:
     decrypted_message = cipher.decrypt(ciphertext)
     print('Received message:', decrypted_message.decode())
 
+    #Save the top secret document as a text file
+    file = open("alice_document.txt", "w")
+    file.write(decrypted_message.decode())
+    file.close()
     # Send a response to the client (Alice)
     response = 'Hello, Alice! Message received'
     client_socket.send(response.encode())

@@ -21,22 +21,17 @@ def generate_keys(size):
 # Generate Alice's key pair
 alice_key, alice_private_key, alice_public_key = generate_keys(1024)
 
-# print("Hi, this is Alice",alice_public_key)
-print()
-
 #Once connection is established, Alice sends her public key to Bob
 client_socket.send(alice_public_key)
 
 #Alice receives Bob's public key
 bob_public_key=client_socket.recv(1024)
 
-# print("Bob PK",bob_public_key)
-
 #After the exchange of public keys between Alice & Bob, Alice creates a cipher object using Bob's public key
 cipher = PKCS1_OAEP.new(RSA.import_key(bob_public_key))
 
-
-message = 'A message to secure'
+with open('top_secret.txt', 'r') as f:
+    message = f.read()
 print("message=" + message)
 
 # Alice encrypts a message to Bob using Bob's public key
@@ -51,9 +46,6 @@ print("signature=" + str(signature))
 # Send the ciphertext and signature to Bob
 data = pickle.dumps((ciphertext, signature))
 client_socket.sendall(data)
-# client_socket.send(b"signature")
-
-# client_socket.send(alice_public_key)
 
 # Wait for a response from Bob
 response = client_socket.recv(1024)
