@@ -5,22 +5,22 @@ from Crypto.Cipher import PKCS1_OAEP
 from Crypto.Signature import PKCS1_v1_5
 
 # Bind the socket to a specific IP address and port number
-EVE_ADDR = ('192.168.246.251', 9090)
-eve_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-eve_socket.bind(EVE_ADDR)
+TRUDY_ADDR = ('192.168.246.251', 9090)
+trudy_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+trudy_socket.bind(TRUDY_ADDR)
 
 BOB_ADDR = ("192.168.246.7", 9090)
 ALICE_PKEY = ""
 BOB_PKEY = ""
 
 # Listen for incoming connections from clients (e.g. Alice)
-eve_socket.listen(5)
+trudy_socket.listen(5)
 print("socket is starting")
 
 while True:
     # Wait for a client to connect
     print('Waiting for connection...')
-    alice_socket, alice_addr = eve_socket.accept()
+    alice_socket, alice_addr = trudy_socket.accept()
     print('Connection from alice:', alice_addr)
     #Once connection is establised, trudy receives Alice's public key
     alice_public_key=alice_socket.recv(1024)
