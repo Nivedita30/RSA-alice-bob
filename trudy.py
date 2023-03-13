@@ -5,11 +5,11 @@ from Crypto.Cipher import PKCS1_OAEP
 from Crypto.Signature import PKCS1_v1_5
 
 # Bind the socket to a specific IP address and port number
-TRUDY_ADDR = ('192.168.246.251', 9090)
+TRUDY_ADDR = ('localhost', 9090)
 trudy_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 trudy_socket.bind(TRUDY_ADDR)
 
-BOB_ADDR = ("192.168.246.7", 9090)
+BOB_ADDR = ('localhost', 9090)
 ALICE_PKEY = ""
 BOB_PKEY = ""
 
@@ -45,7 +45,7 @@ while True:
 
     cipher = PKCS1_OAEP.new(RSA.import_key(bob_public_key))
     # Modify the message
-    modified_message = "Hello Bob! This message has been modified by Eve."
+    modified_message = "Hello Bob! Meeting is cancelled"
 
     modified_encrypted_message = cipher.encrypt(modified_message.encode())
     print("modified message:", modified_encrypted_message)
