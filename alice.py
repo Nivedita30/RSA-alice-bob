@@ -6,6 +6,7 @@ from Crypto.Hash import SHA256
 import pickle
 
 # Connect to Bob's socket
+#Server IP needs to be updated while running the code
 server_address = ('localhost', 9090)
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client_socket.connect(server_address)
@@ -37,12 +38,11 @@ print("message=" + message)
 
 # Alice encrypts the plain text message to Bob using Bob's public key
 ciphertext = cipher.encrypt(message = message.encode())
-print("ciphertext=" + str(ciphertext))
+
 
 # Alice signs the encrypted message by hashing the file contents using her private key
 message_hash = SHA256.new(ciphertext)
 signature = pkcs1_15.new(RSA.import_key(alice_private_key)).sign(message_hash)
-print("signature=" + str(signature))
 
 # Alice sends the ciphertext and signature to Bob
 data = pickle.dumps((ciphertext, signature))

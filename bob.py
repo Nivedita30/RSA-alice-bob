@@ -16,6 +16,7 @@ def generate_keys(size):
 bob_key, bob_private_key, bob_public_key = generate_keys(1024)
 
 # Bind the socket to a specific IP address and port number
+#Server IP needs to be updated while running the code
 server_address = ('localhost', 9090)
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 server_socket.bind(server_address)
